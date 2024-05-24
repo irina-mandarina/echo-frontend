@@ -86,8 +86,8 @@ export async function getUsers(query: string | undefined = undefined, fields: st
 
 export async function logIn(identifier: string, password: string): Promise<any> {
   const loginMutation = gql`
-    mutation LogIn($identifier: String!, $password: String!) {
-      logIn(identifier: $identifier, password: $password) {
+    mutation LogIn($input: LogInDTO!) {
+      logIn(input: $input) {
         jwt
         user {
           username
@@ -100,15 +100,15 @@ export async function logIn(identifier: string, password: string): Promise<any> 
   const requestHeaders = {
     'Authorization': `Bearer ${getJWT()}`
   }
-  const variables = { identifier, password }
+  const variables = { input: {identifier, password } }
   const { logIn } = await request(graphqlEndpoint, loginMutation, variables) as { logIn: any }
   return logIn
 }
 
 export async function signUp(username: string, email: string, password: string): Promise<any> {
   const signUpMutation = gql`
-    mutation SignUp($username: String!, $email: String!, $password: String!) {
-      signUp(username: $username, email: $email, password: $password) {
+    mutation SignUp($input: SignUpDTO!) {
+      signUp(input: $input) {
         jwt
         user {
           username
@@ -120,7 +120,7 @@ export async function signUp(username: string, email: string, password: string):
   const requestHeaders = {
     'Authorization': `Bearer ${getJWT()}`
   }
-  const variables = { username, email, password }
+  const variables = { input: {username, email, password } }
   const { signUp } = await request(graphqlEndpoint, signUpMutation, variables) as { signUp: any }
   console.log(signUp)
   return signUp
