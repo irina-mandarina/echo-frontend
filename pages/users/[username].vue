@@ -77,6 +77,7 @@
         }
         try {
             user.value = await getUser(username)
+            console.log(user.value)
         }
         catch(error: any) {
             console.error(error)

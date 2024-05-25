@@ -4,6 +4,11 @@ import type { User } from '~/models/User'
     
 const graphqlEndpoint = "http://localhost:8080/graphql"
 
+const requestHeaders = {
+  'Authorization': `Bearer ${getJWT()}`
+}
+
+
 function generateUserQuery(fields: string[] | undefined = undefined) {
   let userFields = `
     username
@@ -54,34 +59,24 @@ function generateUserQuery(fields: string[] | undefined = undefined) {
 
 export async function getUser(username: string | undefined = undefined, fields: string[] | undefined = undefined): Promise<any> {
   const userQuery = generateUserQuery(fields)
-  
-  const requestHeaders = {
-    'Authorization': `Bearer ${getJWT()}`
-  }
-
   const variables = { username }
   const { getUser }  = await request(graphqlEndpoint!, userQuery, variables, requestHeaders) as { getUser: any }
-  console.log(getUser)
   return getUser
 }
 
-export async function getUsers(query: string | undefined = undefined, fields: string[] | undefined = undefined): Promise<User[]> {
+export async function searchUsers(query: string | undefined = undefined, fields: string[] | undefined = undefined): Promise<User[]> {
   const userQuery = gql`
-    query GetUsers($query: String) {
-      getUsers(query: $query) {
+    query SearchUsers($query: String) {
+      searchUsers(query: $query) {
         username
         bio
       }
     }
   `
-  const requestHeaders = {
-    'Authorization': `Bearer ${getJWT()}`
-  }
-
   const variables = { query }
-  const { getUsers }  = await request(graphqlEndpoint!, userQuery, variables, requestHeaders) as { getUsers: any }
-  console.log(getUsers)
-  return getUsers
+  const { searchUsers }  = await request(graphqlEndpoint!, userQuery, variables, requestHeaders) as { searchUsers: any }
+  console.log(searchUsers)
+  return searchUsers
 }
 
 export async function logIn(identifier: string, password: string): Promise<any> {
@@ -96,10 +91,7 @@ export async function logIn(identifier: string, password: string): Promise<any> 
         }
       }
     }
-  `
-  const requestHeaders = {
-    'Authorization': `Bearer ${getJWT()}`
-  }
+  `  
   const variables = { input: {identifier, password } }
   const { logIn } = await request(graphqlEndpoint, loginMutation, variables) as { logIn: any }
   return logIn
@@ -116,10 +108,7 @@ export async function signUp(username: string, email: string, password: string):
         }
       }
     }
-  `
-  const requestHeaders = {
-    'Authorization': `Bearer ${getJWT()}`
-  }
+  `  
   const variables = { input: {username, email, password } }
   const { signUp } = await request(graphqlEndpoint, signUpMutation, variables) as { signUp: any }
   console.log(signUp)

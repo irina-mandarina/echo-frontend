@@ -14,9 +14,9 @@
                 {{ i }}
             </span>
         </div>
-        <div class="p-3">
-         <EpisodeSearchResult v-if="resultPage === resultPages[0]" v-for="episode in episodeResults" :episode="episode" />
-         <PodcastSearchResult v-if="resultPage === resultPages[1]" v-for="podcast in podcastResults" :podcast="podcast" />
+        <div class="w-full p-3 overflow-x-hidden overflow-y-auto">
+         <ShowSearchResult v-if="resultPage === resultPages[0]" v-for="show in showResults" :show="show" />
+         <EpisodeSearchResult v-if="resultPage === resultPages[1]" v-for="episode in episodeResults" :episode="episode" />
          <UserSearchResult v-if="resultPage === resultPages[2]" v-for="user in userResults" :user="user" />
         </div>
     </button>
@@ -28,16 +28,16 @@
     import type { Episode, EpisodeSearchResult } from '~/models/Episode';
     import type { Show, ShowSearchResult } from '~/models/Show';
     import type { User } from '~/models/User';
-    import { getEpisodes, getShows } from '~/requests/spotifyRequests';
-    import { getUsers } from '~/requests/userRequests';
+    import { searchEpisodes, searchShows } from '~/requests/spotifyRequests';
+    import { searchUsers } from '~/requests/userRequests';
 
     const props = defineProps<{ query: string }>()
     const emit = defineEmits<{ close: any }>()
     
-    const resultPages = ['Podcasts', 'Episodes', 'Profiles']
+    const resultPages = ['Shows', 'Episodes', 'Profiles']
     const resultPage = ref(resultPages[0])
 
-    const podcastResults = ref<ShowSearchResult[]>([])
+    const showResults = ref<ShowSearchResult[]>([])
     const episodeResults = ref<EpisodeSearchResult[]>([])
     const userResults = ref<User[]>([])
 
@@ -53,7 +53,8 @@
         if (!props.query) return
         if (resultPage.value === resultPages[0]) {
             try {
-                podcastResults.value = await getShows(props.query, 10, 1)
+                showResults.value = await searchShows(props.query, 10, 1)
+                console.log('showResults', showResults.value)
             } catch (error: any) {
                 console.error(error)
                 if (error.response.status == 401) {
@@ -63,7 +64,7 @@
         } 
         else if (resultPage.value === resultPages[1]) {
             try {
-                episodeResults.value = await getEpisodes(props.query, 10, 1)
+                episodeResults.value = await searchEpisodes(props.query, 10, 1)
             } catch (error: any) {
                 console.error(error)
                 if (error.response.status == 401) {
@@ -73,7 +74,7 @@
         } 
         else if (resultPage.value === resultPages[2]) {
             try {
-                userResults.value = await getUsers(props.query)
+                userResults.value = await searchUsers(props.query)
                 console.log('userResults', userResults.value)
             } catch (error: any) {
                 console.error(error.response.status)

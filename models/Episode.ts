@@ -29,5 +29,4 @@ export type EpisodeSearchResult = {
     }[]
     uri: string
     id: string
-    description: string
 }

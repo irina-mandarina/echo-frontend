@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getSpotifyAuthURL } from '~/requests/authRequests'
 
 const router = useRouter();
 
@@ -39,16 +40,9 @@ const errorMessage = ref<string>('')
 
 const navigateToLogIn = async () => {
     try {
-        const res = await fetch('http://localhost:8080/spotify-login-token', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
-            }
-        })
-        const result = await res.json()
-        console.log(result)
-        window.location.href = `http://localhost:8080/spotify-login/?state=${result.state}`
+        const url = await getSpotifyAuthURL()
+        console.log(url)
+        window.location.href = url
     }
     catch (e) {
         console.error(e)
