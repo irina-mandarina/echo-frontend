@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
     import type { User } from '~/models/User'
-    import { getUser } from '~/requests/userRequests';
+    import { getStreamingData, getUser } from '~/requests/userRequests';
     import { useUserStore } from '~/stores/userStore'
 
     let user = ref()
@@ -77,6 +77,10 @@
             console.error(error)
         }
     })
+
+    setInterval(async () => {
+        user.value.streamingData = await getStreamingData(user.value.username)
+    }, 60*1000)
 </script>
 
 <style scoped>

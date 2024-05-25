@@ -151,7 +151,6 @@ export async function getStreamingData(username: string | undefined = undefined)
   const variables = { username };
   const { getUser }: { getUser: User } = await request(graphqlEndpoint, streamingDataQuery, variables, requestHeaders());
   const streamingData: Stream[] = getUser!.streamingData || [];
-  console.log(streamingData)
   return streamingData;
 }
 
