@@ -29,13 +29,7 @@
                         </div>
                     </div>
                     <p class="font-roboto-light p-2">
-                        This is my bio. I like listening to podcasts.
-                        This is my bio. I like listening to podcasts.
-                        This is my bio. I like listening to podcasts.
-                        This is my bio. I like listening to podcasts.
-                        This is my bio. I like listening to podcasts.
-                        This is my bio. I like listening to podcasts.
-                        This is my bio. I like listening to podcasts.
+                        {{ user?.bio ?? 'This user has not set a bio yet.' }}
                     </p>
                 </div>
 

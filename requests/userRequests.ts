@@ -1,12 +1,9 @@
 import { request, gql } from 'graphql-request'
-import { getJWT } from '~/lib/localStorageUtil'
 import type { User } from '~/models/User'
-    
-const graphqlEndpoint = "http://localhost:8080/graphql"
+import { requestHeaders } from './requestHeaders';
+import type { Stream } from '~/models/StreamingData';
 
-const requestHeaders = {
-  'Authorization': `Bearer ${getJWT()}`
-}
+const graphqlEndpoint = process.env.GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
 
 
 function generateUserQuery(fields: string[] | undefined = undefined) {
@@ -60,7 +57,7 @@ function generateUserQuery(fields: string[] | undefined = undefined) {
 export async function getUser(username: string | undefined = undefined, fields: string[] | undefined = undefined): Promise<any> {
   const userQuery = generateUserQuery(fields)
   const variables = { username }
-  const { getUser }  = await request(graphqlEndpoint!, userQuery, variables, requestHeaders) as { getUser: any }
+  const { getUser }  = await request(graphqlEndpoint!, userQuery, variables, requestHeaders()) as { getUser: any }
   return getUser
 }
 
@@ -74,7 +71,7 @@ export async function searchUsers(query: string | undefined = undefined, fields:
     }
   `
   const variables = { query }
-  const { searchUsers }  = await request(graphqlEndpoint!, userQuery, variables, requestHeaders) as { searchUsers: any }
+  const { searchUsers }  = await request(graphqlEndpoint!, userQuery, variables, requestHeaders()) as { searchUsers: any }
   console.log(searchUsers)
   return searchUsers
 }
@@ -113,5 +110,48 @@ export async function signUp(username: string, email: string, password: string):
   const { signUp } = await request(graphqlEndpoint, signUpMutation, variables) as { signUp: any }
   console.log(signUp)
   return signUp
+}
+
+export async function getStreamingData(username: string | undefined = undefined): Promise<Stream[]> {
+  const streamingDataQuery = gql`
+    query getStreamingData($username: String) {
+      getUser(username: $username) {
+        streamingData {
+          episode {
+            id
+            name
+            description
+            audio_preview_url
+            uri
+            images {
+              url
+              width
+              height
+            }
+            show {
+              id
+              uri
+              name
+              publisher
+              description
+              total_episodes
+              images {
+                url
+                width
+                height
+              }
+            }
+          }
+          timestamps
+        }
+      }
+    }
+  `;
+
+  const variables = { username };
+  const { getUser }: { getUser: User } = await request(graphqlEndpoint, streamingDataQuery, variables, requestHeaders());
+  const streamingData: Stream[] = getUser!.streamingData || [];
+  console.log(streamingData)
+  return streamingData;
 }
 

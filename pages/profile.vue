@@ -63,6 +63,10 @@
         await userStore.init()
     })
     let user: ComputedRef<User | null> = computed(() => userStore.user)
+
+    setInterval(() => {
+        userStore.refreshStreamingData()
+    }, 5000)
 </script>
 
 <style scoped>

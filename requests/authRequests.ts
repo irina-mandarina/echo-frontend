@@ -1,11 +1,8 @@
 import request from "graphql-request";
 import { getJWT } from "~/lib/localStorageUtil";
+import { requestHeaders } from "./requestHeaders";
 
-const graphqlEndpoint = "http://localhost:8080/graphql"
-const requestHeaders = {
-    'Authorization': `Bearer ${getJWT()}`
-};
-console.log(requestHeaders);
+const graphqlEndpoint = process.env.GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
 
 export async function getSpotifyAuthURL(): Promise<string> {
     const getSpotifyAuthURLQuery = `
@@ -15,7 +12,7 @@ export async function getSpotifyAuthURL(): Promise<string> {
     `;
 
     try {
-        const { getSpotifyAuthURL } : any = await request(graphqlEndpoint!, getSpotifyAuthURLQuery, undefined, requestHeaders);
+        const { getSpotifyAuthURL } : any = await request(graphqlEndpoint!, getSpotifyAuthURLQuery, undefined, requestHeaders());
         
         console.log(getSpotifyAuthURL);
         return getSpotifyAuthURL;

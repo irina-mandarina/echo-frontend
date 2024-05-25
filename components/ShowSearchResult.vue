@@ -18,7 +18,9 @@
 <script setup lang="ts">
     import type { ShowSearchResult } from '~/models/Show';
 
-    defineProps<{ show: ShowSearchResult }>()
+    defineProps<{ 
+        show: ShowSearchResult
+    }>()
 </script>
 
 <style scoped>
