@@ -80,7 +80,7 @@
 
     setInterval(async () => {
         user.value.streamingData = await getStreamingData(user.value.username)
-    }, 60*1000)
+    }, 60000)
 </script>
 
 <style scoped>

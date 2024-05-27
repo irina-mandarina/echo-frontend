@@ -35,14 +35,14 @@
 
                 <div class="flex flex-row justify-evenly w-1/3 font-franklin text-echo-orange text-2xl text-center p-6">
                     <p class="px-4 bg-echo-gray h-fit rounded-xl">
-                        {{ user?.streamingData?.length ?? 182 }}
+                        {{ user?.streamingData?.length }}
                         <br />
                          streams 
                     </p>
                     <p class="px-4 bg-echo-gray h-fit rounded-xl">
-                        {{ user?.streamingData?.length ?? 35 }} 
+                        {{ user?.streamingData ? new Set(user?.streamingData.map(stream => stream.episode.show.id)).size : '-' }} 
                         <br />
-                         podcasts 
+                         shows 
                     </p>
                 </div>
             </div>
