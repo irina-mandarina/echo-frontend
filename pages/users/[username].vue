@@ -10,45 +10,29 @@
             <div class="w-full h-1/3 relative opacity-0"></div>
 
 
-            <div class="flex flex-row justify-items-start"> 
-
-                <!-- <div class="w-40 relative opacity-0"> &nbsp; </div> -->
-
-                <div class="ml-40 p-4 w-1/2">
-                    <div class="flex flex-row justify-between">
-                        <p class="font-franklin text-3xl">
-                            @{{ user?.username }}
-                        </p>
-                        <div class="flex flex-row">
-                            <p class="font-franklin text-2xl px-4">
-                                42 followers
-                            </p>
-                            <p class="font-franklin text-2xl px-4">
-                                42 following
-                            </p>
-                        </div>
-                    </div>
-                    <p class="font-roboto-light p-2">
-                        {{ user?.bio ?? 'This user has not set a bio yet.' }}
+            <div class="pl-40"> 
+                <div class="">
+                    <p class="font-franklin text-3xl inline-block p-4">
+                        @{{ user?.username }}
+                    </p>
+                    <EchoButton class="inline-block mx-4" @click="follow">
+                        Follow
+                    </EchoButton>
+                    <p class="font-roboto-light text-l px-2 inline-block">
+                        {{ user?.followers?.length ?? 0 }} followers
+                    </p>
+                    <p class="font-roboto-light text-l px-2 inline-block">
+                        {{ user?.following?.length ?? 0 }} followers
                     </p>
                 </div>
-
-                <div class="flex flex-row justify-evenly w-1/3 font-franklin text-echo-orange text-2xl text-center p-6">
-                    <p class="px-4 bg-echo-gray h-fit rounded-xl">
-                        {{ user?.streamingData?.length ?? 182 }}
-                        <br />
-                         streams 
-                    </p>
-                    <p class="px-4 bg-echo-gray h-fit rounded-xl">
-                        {{ user?.streamingData?.length ?? 35 }} 
-                        <br />
-                         podcasts 
-                    </p>
-                </div>
+                
+                <p class="font-roboto-light p-2">
+                    {{ user?.bio ?? 'This user has not set a bio yet.' }}
+                </p>
             </div>
             
            <!-- Stream data -->
-           <StreamingDataList :streaming-data="user?.streamingData" />
+           <StreamingDataList class="my-10" :streaming-data="user?.streamingData" />
 
         </NuxtLayout>
     </div>
@@ -78,9 +62,19 @@
         }
     })
 
-    setInterval(async () => {
-        user.value.streamingData = await getStreamingData(user.value.username)
-    }, 60000)
+    // setInterval(async () => {
+       // user.value.streamingData = await getStreamingData(user.value.username)
+    //}, 60000)
+
+
+    const follow = async () => {
+        try {
+            await userStore.followUser(user.value.username)
+        }
+        catch(error: any) {
+            console.error(error)
+        }
+    }
 </script>
 
 <style scoped>

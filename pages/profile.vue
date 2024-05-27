@@ -21,10 +21,10 @@
                         </p>
                         <div class="flex flex-row">
                             <p class="font-franklin text-2xl px-4">
-                                42 followers
+                                {{ user?.followers?.length ?? 0 }} followers
                             </p>
                             <p class="font-franklin text-2xl px-4">
-                                42 following
+                                {{ user?.following?.length ?? 0 }} following
                             </p>
                         </div>
                     </div>
@@ -33,22 +33,11 @@
                     </p>
                 </div>
 
-                <div class="flex flex-row justify-evenly w-1/3 font-franklin text-echo-orange text-2xl text-center p-6">
-                    <p class="px-4 bg-echo-gray h-fit rounded-xl">
-                        {{ user?.streamingData?.length }}
-                        <br />
-                         streams 
-                    </p>
-                    <p class="px-4 bg-echo-gray h-fit rounded-xl">
-                        {{ user?.streamingData ? new Set(user?.streamingData.map(stream => stream.episode.show.id)).size : '-' }} 
-                        <br />
-                         shows 
-                    </p>
-                </div>
+                
             </div>
             
             <!-- Stream data -->
-            <StreamingDataList :streaming-data="user?.streamingData as Stream[]" />
+            <StreamingDataList class="my-10" :streaming-data="user?.streamingData as Stream[]" />
         </NuxtLayout>   
     </div>
 </template>
@@ -64,9 +53,10 @@
     })
     let user: ComputedRef<User | null> = computed(() => userStore.user)
 
-    setInterval(() => {
-        userStore.refreshStreamingData()
-    }, 5000)
+    setInterval(async () => {
+        // await userStore.refreshStreamingData()
+        console.log("TOFO")
+    }, 30000)
 </script>
 
 <style scoped>

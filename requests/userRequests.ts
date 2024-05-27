@@ -11,6 +11,12 @@ function generateUserQuery(fields: string[] | undefined = undefined) {
     username
     bio
     spotifyConnected
+    followers {
+      username
+    }
+    following {
+      username
+    }
     streamingData {
       episode {
         id
@@ -154,3 +160,14 @@ export async function getStreamingData(username: string | undefined = undefined)
   return streamingData;
 }
 
+export async function followUser(username: string): Promise<void> {
+  const followUserMutation = gql`
+    mutation FollowUser($username: String!) {
+      followUser(username: $username)
+    }
+  `
+
+  const variables = { username }
+  const { followUser }: any = await request(graphqlEndpoint, followUserMutation, variables, requestHeaders())
+  return followUser
+}

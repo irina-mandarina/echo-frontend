@@ -7,4 +7,6 @@ export type User = {
     dateOfRegistration: string | null
     streamingData: Stream[] | null
     spotifyConnected: boolean
+    following?: User[]
+    followers?: User[]
 }

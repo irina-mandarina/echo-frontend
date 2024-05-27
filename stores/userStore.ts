@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getStreamingData, getUser, logIn, signUp } from '~/requests/userRequests'
+import { followUser, getStreamingData, getUser, logIn, signUp } from '~/requests/userRequests'
 import { setJWT, removeJWT } from '~/lib/localStorageUtil'
 import type { User } from '~/models/User'
 
@@ -67,14 +67,26 @@ export const useUserStore = defineStore({
             }
             catch (error: any) {
                 console.error(error)
-                this.errorMessage = error.response.errors[0].message
+                this.errorMessage = error?.response?.errors[0]?.message
                 if (error.response?.status === 401) {
                     removeJWT()
                     if (window) window.location.href = '/login'
                     return
                 }
             }
-        }    
+        },
+        async followUser(username: string) {
+            try {
+                const res = await followUser(username)
+                console.log(res)
+                this.errorMessage = null
+                this.setUser() //TODO: optimise!!
+            }    
+            catch (error: any) {
+                console.error(error)
+                this.errorMessage = error.response.errors[0].message
+            }
+        }
     }
 });
 
