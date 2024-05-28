@@ -15,7 +15,10 @@
                     <p class="font-franklin text-3xl inline-block p-4">
                         @{{ user?.username }}
                     </p>
-                    <EchoButton class="inline-block mx-4" @click="follow">
+                    <EchoButton v-if="isFollowed" class="inline-block mx-4" @click="unfollow">
+                        Unfollow
+                    </EchoButton>
+                    <EchoButton v-else class="inline-block mx-4" @click="follow">
                         Follow
                     </EchoButton>
                     <p class="font-roboto-light text-l px-2 inline-block">
@@ -40,7 +43,7 @@
 
 <script setup lang="ts">
     import type { User } from '~/models/User'
-    import { getStreamingData, getUser } from '~/requests/userRequests';
+    import { getFollowers, getStreamingData, getUser } from '~/requests/userRequests';
     import { useUserStore } from '~/stores/userStore'
 
     let user = ref()
@@ -70,11 +73,35 @@
     const follow = async () => {
         try {
             await userStore.followUser(user.value.username)
+            await refreshFollowers()
         }
         catch(error: any) {
             console.error(error)
         }
     }
+
+    const unfollow = async () => {
+        try {
+            await userStore.unfollowUser(user.value.username)
+            await refreshFollowers()
+        }
+        catch(error: any) {
+            console.error(error)
+        }
+    }
+
+    const refreshFollowers = async () => {
+        try {
+            user.value.followers = await getFollowers(user.value.username)
+        }
+        catch(error: any) {
+            console.error(error)
+        }
+    }
+
+    const isFollowed: ComputedRef<boolean> = computed(() => {
+        return userStore?.user?.following?.filter((u) => u.username === user.value?.username)?.length as number > 0 ?? false
+    })
 </script>
 
 <style scoped>

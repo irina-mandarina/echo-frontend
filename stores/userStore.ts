@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { followUser, getStreamingData, getUser, logIn, signUp } from '~/requests/userRequests'
+import { followUser, getStreamingData, getUser, logIn, signUp, unfollowUser, getFollowData } from '~/requests/userRequests'
 import { setJWT, removeJWT } from '~/lib/localStorageUtil'
 import type { User } from '~/models/User'
 
@@ -80,7 +80,25 @@ export const useUserStore = defineStore({
                 const res = await followUser(username)
                 console.log(res)
                 this.errorMessage = null
-                this.setUser() //TODO: optimise!!
+                getFollowData(username)
+                this.user?.following?.push({username} as User)
+            }    
+            catch (error: any) {
+                console.error(error)
+                this.errorMessage = error.response.errors[0].message
+            }
+        },
+        async unfollowUser(username: string) {
+            try {
+                const res = await unfollowUser(username)
+                console.log(res)
+                this.errorMessage = null
+                getFollowData(username)
+                if (this.user?.following)
+                    this.user.following = this.user?.following?.filter(user => user.username !== username)
+                else {
+                    await this.setUser()
+                }
             }    
             catch (error: any) {
                 console.error(error)

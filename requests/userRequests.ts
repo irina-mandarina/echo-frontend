@@ -171,3 +171,50 @@ export async function followUser(username: string): Promise<void> {
   const { followUser }: any = await request(graphqlEndpoint, followUserMutation, variables, requestHeaders())
   return followUser
 }
+
+export async function getFollowers(username: string): Promise<string[]> {
+  const followersQuery = gql`
+    query GetUser($username: String) {
+      getUser(username: $username) {
+        followers {
+          username
+        }
+      }
+    }
+  `
+
+  const variables = { username }
+  const { getUser }: any = await request(graphqlEndpoint, followersQuery, variables, requestHeaders())
+  return getUser
+}
+
+export async function unfollowUser(username: string): Promise<void> {
+  const unfollowUserMutation = gql`
+    mutation UnfollowUser($username: String!) {
+      unfollowUser(username: $username)
+    }
+  `
+
+  const variables = { username }
+  const { unfollowUser }: any = await request(graphqlEndpoint, unfollowUserMutation, variables, requestHeaders())
+  return unfollowUser
+}
+
+export async function getFollowData(username: string): Promise<User> {
+  const followDataQuery = gql`
+    query GetUser($username: String) {
+      getUser(username: $username) {
+        followers {
+          username
+        }
+        following {
+          username
+        }
+      }
+    }
+  `
+
+  const variables = { username }
+  const { getUser }: any = await request(graphqlEndpoint, followDataQuery, variables, requestHeaders())
+  return getUser
+}
