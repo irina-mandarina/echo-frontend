@@ -4,11 +4,13 @@
             <!-- Profile picture and BG -->
             <div class="absolute bg-echo-gray w-full h-1/3 -z-[101]">
                 <div class="absolute bg-echo-gray w-full h-1/2 -top-1/2 -z-[101]"></div>
-                <div class="rounded-full w-32 h-32 bg-echo-orange absolute -bottom-24 left-6">
-                </div>
+                <div class="rounded-full w-32 h-32 bg-echo-orange absolute -bottom-24 left-6"></div>
             </div>
             <div class="w-full h-1/3 relative opacity-0"></div>
 
+            <EchoButton class="text-xs float-right m-4" @click="logout">
+                Log out
+            </EchoButton>
 
             <div class="flex flex-row justify-items-start"> 
 
@@ -38,6 +40,7 @@
             
             <!-- Stream data -->
             <StreamingDataList class="my-10" :streaming-data="user?.streamingData as Stream[]" />
+            <hr />
         </NuxtLayout>   
     </div>
 </template>
@@ -57,6 +60,10 @@
         // await userStore.refreshStreamingData()
         console.log("TOFO")
     }, 30000)
+
+    const logout = async () => {
+        await userStore.logOut()
+    }
 </script>
 
 <style scoped>

@@ -36,7 +36,7 @@
             
            <!-- Stream data -->
            <StreamingDataList class="my-10" :streaming-data="user?.streamingData" />
-
+            <hr />
         </NuxtLayout>
     </div>
 </template>

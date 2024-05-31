@@ -44,6 +44,7 @@ export const useUserStore = defineStore({
         async logOut() {
             this.user = null
             removeJWT()
+            if (window) window.location.href = '/login'
         },
         async signUp(username: string, email: string, password: string) {
             try {
