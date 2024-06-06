@@ -20,18 +20,9 @@
                     We know you like Sea moss girlies and Diary of a CEO. How about you give our special recommendations a listen? 
                 </p>
                 <div class="whitespace-nowrap justify-between overflow-auto echo-scrollbar">
-                    <div class="p-4 inline-block">
-                        <img width="350" heigth="350" src="../assets/huberman.jpg" />
+                    <div v-if="episodeRecommendations" v-for="episode in episodeRecommendations" class="p-4 inline-block">
+                        <img width="350" heigth="350" :src="episode.images[0].url" />
                     </div>
-                    <div class="p-4 inline-block">
-                        <img width="350" heigth="350" src="../assets/goop.jpeg" />
-                    </div>
-                    <div class="p-4 inline-block">
-                        <img width="350" heigth="350" src="../assets/maintenance_phase.jpeg" />
-                    </div>
-                    <div class="p-4 inline-block">
-                        <img width="350" heigth="350" src="../assets/crime_junkie.png" />
-                    </div> 
                 </div>
                 <div class="right-2 inset-y-3/4 absolute pt-8 pr-2">
                     <EchoButton>
@@ -70,6 +61,9 @@
 </template>
 
 <script setup lang="ts">
+    import { getEpisodeRecommendations } from '~/requests/spotifyRequests'
+    const episodeRecommendations = await getEpisodeRecommendations();
+    console.log(episodeRecommendations)
 
 </script>
 

@@ -61,3 +61,30 @@ export async function searchShows(query: string, limit: number, offset: number):
         return [];
     }
 }
+
+
+export async function getEpisodeRecommendations(count = 10): Promise<any[]> {
+    const variables = { count }
+
+    const recommendationQuery = gql`
+        query RecommendEpisodes($count: Int!) {
+            recommendEpisodes(count: $count) {
+                name
+                release_date
+                images {
+                    url
+                }
+                uri
+                id
+                description
+                show {
+                    name
+                    publisher
+                }
+            }
+        }
+    `
+
+    const { recommendEpisodes }: { recommendEpisodes: any[] } = await request(graphqlEndpoint, recommendationQuery, variables, requestHeaders());
+    return recommendEpisodes;
+}
