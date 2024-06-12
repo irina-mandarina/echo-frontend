@@ -31,11 +31,11 @@
                         <img src="../assets/loading.gif" />
                     </div>  
                 </div>
-                <div class="right-2 inset-y-3/4 absolute pt-8 pr-2">
+                <!-- <div class="right-2 inset-y-3/4 absolute pt-8 pr-2">
                     <EchoButton>
                         See more ->
                     </EchoButton> 
-                </div>  
+                </div>   -->
             </div>
 
             
@@ -54,11 +54,11 @@
                         <img src="../assets/loading.gif" />
                     </div>  
                 </div>
-                <div class="right-2 inset-y-3/4 absolute pt-8 pr-2">
+                <!-- <div class="right-2 inset-y-3/4 absolute pt-8 pr-2">
                     <EchoButton>
                         See more ->
                     </EchoButton> 
-                </div>  
+                </div>   -->
             </div>
         </NuxtLayout>
     </div>
