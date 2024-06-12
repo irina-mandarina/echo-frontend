@@ -14,18 +14,18 @@
         </div>
 
         <div class="w-1/3 flex justify-end ">
-            <NuxtLink to="/spotify" class="flex flex-row cursor-pointer" v-if="!userStore?.user?.spotifyConnected">
+            <NuxtLink to="/spotify" class="flex flex-row cursor-pointer py-2" v-if="!userStore?.user?.spotifyConnected">
                 Connect to
                 &nbsp;
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Spotify.png/900px-Spotify.png?20170916190817" alt="Spotify" class="w-6 h-6" />
             </NuxtLink>
 
             <NuxtLink v-for="navItem in ['home', 'charts', 'about']" :to='`/${navItem === "home" ? "" : navItem}`'
-            :class="`px-4 ${isRoute(navItem) ? 'text-echo-orange' : 'text-black'}`">
+            :class="`px-4 py-2 font-roboto-light text-l ${isRoute(navItem) ? 'text-echo-orange' : 'text-black'}`">
                 {{ navItem.replace(navItem[0], navItem[0].toUpperCase()) }}
             </NuxtLink>
 
-            <NuxtLink class="rounded-full px-4" to="/profile">
+            <NuxtLink class="rounded-full px-4 py-2" to="/profile">
                 <i class="fa-solid fa-user text-black border-solid border-1 border-black"></i>
             </NuxtLink>
         </div>
@@ -41,6 +41,7 @@
     const isRoute = (navItem: string) =>
         router.currentRoute.value.path.replaceAll("/", "").includes(navItem) || router.currentRoute.value.path === '/' && navItem === 'home'
 
+    
 
 </script>
 

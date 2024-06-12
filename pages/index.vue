@@ -1,16 +1,15 @@
 <template>
     <div class="layout-container">
         <NuxtLayout class="w-full">
-            <div class="h-2/3 w-full bg-echo-gray top-0 flex flex-row justify-end">
-                <span class="font-franklin text-5xl px-4 py-8">
+            <div class="h-[500px] w-full bg-echo-gray top-0 flex flex-row justify-end overflow-hidden bg-picture">
+                <div class="font-franklin text-5xl px-4 my-auto w-full">
                     Love what you listen to<span class="text-echo-orange">;</span>
                     <br />
                     Let <span class="text-echo-orange">podcasts</span> be your passion project
                     <p class="font-roboto-light text-3xl py-4">
                         Share your listening experience. Explore, inspire, connect.
                     </p>
-                </span>
-                <img class="" src="../assets/pod.jpeg" />
+                </div>
             </div>
 
             <div class="echo-scrollbar py-20 px-2 relative">
@@ -28,6 +27,9 @@
                     <div v-if="episodeRecommendations && episodeRecommendations.length !== 0" v-for="episode in episodeRecommendations" class="p-4 inline-block">
                         <img width="350" heigth="350" :src="episode.images[0].url" />
                     </div>
+                    <div v-else class="heigth-[350px] flex justify-center">
+                        <img src="../assets/loading.gif" />
+                    </div>  
                 </div>
                 <div class="right-2 inset-y-3/4 absolute pt-8 pr-2">
                     <EchoButton>
@@ -48,8 +50,15 @@
                     <div v-if="topShows && topShows.length !== 0" v-for="show in topShows" class="p-4 inline-block">
                         <img width="350" heigth="350" :src="show.images[0].url" />
                     </div>
+                    <div v-else class="heigth-[350px] flex justify-center">
+                        <img src="../assets/loading.gif" />
+                    </div>  
                 </div>
-                <EchoButton class="absolute right-2 bottom-6" />
+                <div class="right-2 inset-y-3/4 absolute pt-8 pr-2">
+                    <EchoButton>
+                        See more ->
+                    </EchoButton> 
+                </div>  
             </div>
         </NuxtLayout>
     </div>
@@ -61,40 +70,56 @@
     import { getEpisodeRecommendations, getTopShows } from '~/requests/spotifyRequests'
     import { useUserStore } from '~/stores/userStore'
     import { demoTopShows }  from '~/stores/topShows'
+    import { demoEpisodeRecommendations } from '~/stores/episodeRecommendations'
 
     let userStore= useUserStore()
-    let episodeRecommendations: Episode[] = []
-    let topShows: any[] = []
+    let episodeRecommendations = ref()
+    let topShows = ref()
 
     onMounted(async () => {
         try {
-            episodeRecommendations = await getEpisodeRecommendations()
-        }
-        catch(e) {
-            console.error(e)
-        }
-        try {
-            topShows = await getTopShows();
-            if (topShows.length === 0) {
-                topShows = demoTopShows
+            episodeRecommendations.value = await getEpisodeRecommendations()
+            if (episodeRecommendations.value.length === 0) {
+                episodeRecommendations.value = demoEpisodeRecommendations
             }
         }
-        catch(e) {
-            console.error(e)
-            topShows = demoTopShows
+        catch(e: any) {
+            console.error(e.response?.errors?.[0]?.message)
+            if (e.error === "Unauthorised") {
+                navigateTo('/login')
+            }
+            episodeRecommendations.value = demoEpisodeRecommendations
+        }
+
+        try {
+            topShows.value = await getTopShows();
+            if (topShows.value.length === 0) {
+                topShows.value = demoTopShows
+            }
+        }
+        catch(e: any) {
+            console.error(e.response?.errors?.[0]?.message)
+            if (e.error === "Unauthorised") {
+                navigateTo('/login')
+            }
+            topShows.value = demoTopShows
 
         }
 
     })
-
-    
-    console.log(topShows)
 
 </script>
 
 <style>
     button:focus {
         outline: none;
+    }
+
+    .bg-picture {
+        background-image: url('../assets/pod.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
 
 </style>

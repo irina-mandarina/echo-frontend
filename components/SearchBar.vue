@@ -4,7 +4,7 @@
             <div :class="containerClasses">
                 <i :class="iconClasses"></i>
                 <input
-                    class="p-2 bg-echo-bg rounded-r-xl font-roboto outline-none focus:outline-none w-full"
+                    class="p-2 bg-echo-bg rounded-r-xl font-roboto-light outline-none focus:outline-none w-full"
                     v-model="query"
                     @focus="searchBarFocused = true"
                     @blur="searchBarFocused = false"

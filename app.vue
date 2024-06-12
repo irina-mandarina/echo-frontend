@@ -1,4 +1,11 @@
 <template>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {{ currentPageTitle }}
+        </title>
+    </head>
     <div>
         <NuxtPage />
     </div>
@@ -10,6 +17,14 @@
 </template>
 
 <script setup>
+    import { useRouter } from "vue-router"
+    
+    const router = useRouter()
+
+    const currentPageTitle = computed(() => {
+            const route = router.currentRoute.value.path.replaceAll("/", "")
+            return route === "" ? "Home" : route[0].toUpperCase() + route.slice(1)
+        })
 </script>
 
 <style>

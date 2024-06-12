@@ -22,6 +22,7 @@ export const useUserStore = defineStore({
             }
             catch (error: any) {
                 console.error(error)
+                debugger
                 if (error.response?.status === 401) {
                     removeJWT()
                     if (window) window.location.href = '/login'
