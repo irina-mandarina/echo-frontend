@@ -1,7 +1,7 @@
 import request, { gql } from "graphql-request"
 import { getJWT } from "~/lib/localStorageUtil"
 import type { User } from "~/models/User"
-import type { EpisodeSearchResult } from "~/models/Episode"
+import type { Episode, EpisodeSearchResult } from "~/models/Episode"
 import type { Show, ShowSearchResult } from "~/models/Show"
 import { requestHeaders } from "./requestHeaders"
 
@@ -109,4 +109,35 @@ export async function getTopShows(count = 10): Promise<Show[]> {
 
     const { getTopShows }: { getTopShows: Show[] } = await request(graphqlEndpoint, topShowsQuery, variables, requestHeaders());
     return getTopShows;
+}
+
+export async function getEpisodeById(showId: string): Promise<Episode> {
+    const variables = { showId };
+
+    const getEpisodeQuery = gql`
+        query GetEpisode($showId: String!) {
+            getEpisode(showId: $showId) {
+                name
+                release_date
+                images {
+                    url
+                }
+                uri
+                id
+                description
+                show {
+                    name
+                    publisher
+                    images {
+                        url
+                    }
+                    uri
+                    id
+                }
+            }
+        }
+    `
+
+    const { getEpisode }: { getEpisode: Episode } = await request(graphqlEndpoint!, getEpisodeQuery, variables, requestHeaders());
+    return getEpisode;
 }

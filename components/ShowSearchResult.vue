@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row p-2 w-full">
+    <div @click="navigateTo(show.uri, { external: true })" class="flex flex-row p-2 w-full">
         <div class="w-[15%] h-full">
             <img :src="show.images[2].url" alt="podcast cover" class="rounded" />
         </div>

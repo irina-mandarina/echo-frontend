@@ -23,7 +23,7 @@
 
             <div class="font-franklin text-xl echo-scrollbar px-2 relative">
                 <p class="px-4 pb-2 text-echo-orange">
-                    {{ episodesThisWeek?.length }} shows
+                    {{ episodesThisWeek?.length }} episodes
                 </p>
                 <div class="whitespace-nowrap justify-between overflow-auto echo-scrollbar">
                     <div v-if="episodesThisWeek && episodesThisWeek.length !== 0" v-for="episode in episodesThisWeek" class="p-4 inline-block">
