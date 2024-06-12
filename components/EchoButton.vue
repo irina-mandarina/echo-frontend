@@ -1,5 +1,5 @@
 <template>
-    <button class="py-2 px-6 bg-echo-orange text-echo-white rounded-xl hover:bg-orange-600 duration-100">
+    <button class="py-2 px-6 bg-echo-orange text-echo-white rounded-xl hover:bg-orange-700 duration-100">
         <slot />
     </button>
 </template>

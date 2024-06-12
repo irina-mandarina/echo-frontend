@@ -10,8 +10,6 @@
 </template>
 
 <script setup lang="ts">
-    import { defineProps } from 'vue'
-    import { defineEmits } from 'vue'
 
     const emit = defineEmits(['update:value'])
     const props = defineProps<{

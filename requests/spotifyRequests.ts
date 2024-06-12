@@ -2,7 +2,7 @@ import request, { gql } from "graphql-request"
 import { getJWT } from "~/lib/localStorageUtil"
 import type { User } from "~/models/User"
 import type { EpisodeSearchResult } from "~/models/Episode"
-import type { ShowSearchResult } from "~/models/Show"
+import type { Show, ShowSearchResult } from "~/models/Show"
 import { requestHeaders } from "./requestHeaders"
 
 const graphqlEndpoint = process.env.GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
@@ -87,4 +87,26 @@ export async function getEpisodeRecommendations(count = 10): Promise<any[]> {
 
     const { recommendEpisodes }: { recommendEpisodes: any[] } = await request(graphqlEndpoint, recommendationQuery, variables, requestHeaders());
     return recommendEpisodes;
+}
+
+export async function getTopShows(count = 10): Promise<Show[]> {
+    const variables = { count }
+
+    const topShowsQuery = gql`
+        query GetTopShows($count: Int!) {
+            getTopShows(count: $count) {
+                name
+                publisher
+                images {
+                    url
+                }
+                uri
+                id
+                description
+            }
+        }
+    `
+
+    const { getTopShows }: { getTopShows: Show[] } = await request(graphqlEndpoint, topShowsQuery, variables, requestHeaders());
+    return getTopShows;
 }

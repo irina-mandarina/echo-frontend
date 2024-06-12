@@ -1,15 +1,16 @@
 <template>
     <div class="layout-container">
-        <NuxtLayout>
-            <div class="h-2/3 w-full bg-echo-gray top-0 flex flex-col justify-end">
-                <span class="font-franklin text-5xl p-4">
-                    Love what you listen to;
+        <NuxtLayout class="w-full">
+            <div class="h-2/3 w-full bg-echo-gray top-0 flex flex-row justify-end">
+                <span class="font-franklin text-5xl px-4 py-8">
+                    Love what you listen to<span class="text-echo-orange">;</span>
                     <br />
                     Let <span class="text-echo-orange">podcasts</span> be your passion project
+                    <p class="font-roboto-light text-3xl py-4">
+                        Share your listening experience. Explore, inspire, connect.
+                    </p>
                 </span>
-                <p class="font-roboto-light text-3xl p-4">
-                    Share your listening experience. Explore, inspire, connect.
-                </p>
+                <img class="" src="../assets/pod.jpeg" />
             </div>
 
             <div class="echo-scrollbar py-20 px-2 relative">
@@ -17,10 +18,14 @@
                     Picked just for you
                 </p>
                 <p class="roboto-light text-xl p-2">
-                    We know you like Sea moss girlies and Diary of a CEO. How about you give our special recommendations a listen? 
+                    We know you like 
+                    {{ userStore.user?.streamingData && userStore.user?.streamingData.length > 0 ?  userStore.user?.streamingData[0]?.episode?.show.name ?? "Sea moss girlies" : "Sea moss girlies"}}
+                     and 
+                     {{ userStore.user?.streamingData && userStore.user?.streamingData.length > 0 ? userStore.user?.streamingData[1]?.episode?.show.name ?? "Diary of a CEO" : "Diary of a CEO"}}
+                     . How about you give our special recommendations a listen? 
                 </p>
                 <div class="whitespace-nowrap justify-between overflow-auto echo-scrollbar">
-                    <div v-if="episodeRecommendations" v-for="episode in episodeRecommendations" class="p-4 inline-block">
+                    <div v-if="episodeRecommendations && episodeRecommendations.length !== 0" v-for="episode in episodeRecommendations" class="p-4 inline-block">
                         <img width="350" heigth="350" :src="episode.images[0].url" />
                     </div>
                 </div>
@@ -40,18 +45,8 @@
                     Other people have been listening to these lately. Would you like to hear what the fuss is all about?
                 </p>
                 <div class="whitespace-nowrap justify-between overflow-auto echo-scrollbar">
-                    
-                    <div class="p-4 inline-block">
-                        <img width="350" heigth="350" src="../assets/huberman.jpg" />
-                    </div>
-                    <div class="p-4 inline-block">
-                        <img width="350" heigth="350" src="../assets/goop.jpeg" />
-                    </div>
-                    <div class="p-4 inline-block">
-                        <img width="350" heigth="350" src="../assets/maintenance_phase.jpeg" />
-                    </div>
-                    <div class="p-4 inline-block">
-                        <img width="350" heigth="350" src="../assets/crime_junkie.png" />
+                    <div v-if="topShows && topShows.length !== 0" v-for="show in topShows" class="p-4 inline-block">
+                        <img width="350" heigth="350" :src="show.images[0].url" />
                     </div>
                 </div>
                 <EchoButton class="absolute right-2 bottom-6" />
@@ -61,12 +56,45 @@
 </template>
 
 <script setup lang="ts">
-    import { getEpisodeRecommendations } from '~/requests/spotifyRequests'
-    const episodeRecommendations = await getEpisodeRecommendations();
-    console.log(episodeRecommendations)
+    import type { Episode } from '~/models/Episode';
+    import type { Show } from '~/models/Show';
+    import { getEpisodeRecommendations, getTopShows } from '~/requests/spotifyRequests'
+    import { useUserStore } from '~/stores/userStore'
+    import { demoTopShows }  from '~/stores/topShows'
+
+    let userStore= useUserStore()
+    let episodeRecommendations: Episode[] = []
+    let topShows: any[] = []
+
+    onMounted(async () => {
+        try {
+            episodeRecommendations = await getEpisodeRecommendations()
+        }
+        catch(e) {
+            console.error(e)
+        }
+        try {
+            topShows = await getTopShows();
+            if (topShows.length === 0) {
+                topShows = demoTopShows
+            }
+        }
+        catch(e) {
+            console.error(e)
+            topShows = demoTopShows
+
+        }
+
+    })
+
+    
+    console.log(topShows)
 
 </script>
 
-<style scoped>
+<style>
+    button:focus {
+        outline: none;
+    }
 
 </style>

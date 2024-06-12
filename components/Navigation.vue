@@ -4,7 +4,7 @@
             <div class="rounded-full bg-orange-300 w-28 h-28 absolute -top-14 -left-14 -z-[100] shadow-md"></div>
             <div class="rounded-full bg-orange-400 w-20 h-20 absolute -top-10 -left-10 -z-[100] shadow-md"></div>
             <div class="rounded-full bg-orange-500 w-12 h-12 absolute -top-6 -left-6 -z-[100] shadow-md"></div>
-            <div class="drop-shadow-lg px-2 font-franklin text-3xl hover:animate-ping">
+            <div class="drop-shadow-lg px-2 font-franklin text-3xl hover:scale-150 duration-100">
                 Echo
             </div>
         </NuxtLink>

@@ -20,9 +20,7 @@
                     </div>
 
                     <div class="flex flex-col my-3 w-1/2 h-full">
-                        <div class="bg-orange-300 p-3 mx-auto h-32 w-32">
-
-                        </div>
+                        <img src="../assets/login.png">
 
                         <NuxtLink to="/signup" class="text-sm mx-auto text-center mt-2">
                             Don't have an account?
@@ -41,19 +39,23 @@
 
 <script setup lang="ts">
     import { getJWT, setJWT } from '~/lib/localStorageUtil';
-import { useUserStore } from '~/stores/userStore'
+    import { useUserStore } from '~/stores/userStore'
 
     const userStore = useUserStore()
     const identifier = ref('')
     const password = ref('')
 
     async function logIn() {
-        console.log('Logging in: ', identifier.value, password.value)  
-        await userStore.logIn(identifier.value, password.value)
-        if (userStore.errorMessage) {
-            return
+        console.log('Logging in: ', identifier.value, password.value)
+        try {  
+            await userStore.logIn(identifier.value, password.value)
+            if (userStore.errorMessage) {
+                return
+            }
+            navigateTo('/')
+        } catch (error) {
+            console.error(error)
         }
-        navigateTo('/')
     }
 </script>
 
